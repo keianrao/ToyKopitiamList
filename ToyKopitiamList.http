@@ -1,6 +1,3 @@
 @ToyKopitiamList_HostAddress = http://localhost:5289
 
-GET {{ToyKopitiamList_HostAddress}}/weatherforecast/
-Accept: application/json
-
 ###
