@@ -1,4 +1,5 @@
 using System.Data.Odbc;
+using System.Text.Json.Nodes;
 
 class
 ToyKopitiamListAPI {
@@ -7,6 +8,38 @@ ToyKopitiamListAPI {
     dbConn;
 
 //  ---%-@-%---
+
+    JsonArray GetAllEntries()
+    {
+        OdbcCommand command = new(
+            "\n SELECT *" +
+            "\n FROM Entries;",
+            dbConn);
+
+        JsonArray returnee = new();
+        using (OdbcDataReader reader = command.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                string name = reader.GetString(1);
+                string address = reader.GetString(2);
+                double latitude = reader.GetDouble(3);
+                double longitude = reader.GetDouble(4);
+                DateTime dateAdded = reader.GetDateTime(5);
+
+                JsonObject addee = new();
+                addee.Add("name", JsonValue.Create(name));
+                addee.Add("address", JsonValue.Create(address));
+                addee.Add("latitude", JsonValue.Create(latitude));
+                addee.Add("longitude", JsonValue.Create(longitude));
+                addee.Add("dateAdded", JsonValue.Create(dateAdded));
+                returnee.Add(addee);
+            }
+        }
+        return returnee;
+    }
+
+//   -  -%-  -
 
     static string GetAppTime() {
         return DateTime.Now.ToString();
@@ -22,6 +55,7 @@ ToyKopitiamListAPI {
 
             var webApp = WebApplication.CreateBuilder(args).Build();
             webApp.MapGet("/time", GetAppTime);
+            webApp.MapGet("/entries", inst.GetAllEntries);
             webApp.Run();
         }
     }
@@ -50,18 +84,20 @@ ToyKopitiamListAPI {
     ToyKopitiamListAPI(OdbcConnection dbConn)
     {
         this.dbConn = dbConn;
+        TestDatabaseConnection();
     }
 
     void TestDatabaseConnection()
     {
         OdbcCommand command = new(
             "\n SELECT COUNT(*)" +
-            "\n FROM Entries;");
+            "\n FROM Entries;",
+            dbConn);
 
-        OdbcDataReader reader = command.ExecuteReader();
-        reader.Read();
-        reader.GetInt64(1);
-        reader.Close();
+        command.ExecuteScalar();
+        // Truly confusingly, compared to like JDBC, if you
+        // select simply one scalar value then you have to
+        // ask for a scalar execution.
     }
 
 }
