@@ -1,0 +1,29 @@
+
+body {
+    background: aliceblue;
+    width: 70%;
+    margin: auto;    
+}
+
+.kopitiam {
+    border: 0.1em solid #0001;
+    border-radius: 1em;
+    padding: 1em;
+    background: white;
+    position: relative;
+}
+.kopitiam > h3 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+}
+.kopitiam .address {
+    
+}
+.kopitiam .dateAdded {
+    position: absolute;
+    top: 10%;
+    left: 75%;
+    width: 23%;
+    text-align: right;
+    color: grey;
+}

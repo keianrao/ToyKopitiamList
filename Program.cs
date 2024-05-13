@@ -54,6 +54,8 @@ ToyKopitiamListAPI {
             ToyKopitiamListAPI inst = new(dbConn);
 
             var webApp = WebApplication.CreateBuilder(args).Build();
+            webApp.UseStaticFiles();
+            webApp.UseDefaultFiles();
             webApp.MapGet("/time", GetAppTime);
             webApp.MapGet("/entries", inst.GetAllEntries);
             webApp.Run();
