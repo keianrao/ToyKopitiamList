@@ -9,6 +9,7 @@ body {
     border: 0.1em solid #0001;
     border-radius: 1em;
     padding: 1em;
+    margin: 0.7em 0;
     background: white;
     position: relative;
 }
@@ -26,9 +27,6 @@ body {
 .kopitiam h3 {
     margin-top: 0;
     margin-bottom: 0.5em;
-}
-.kopitiam .address {
-    
 }
 .kopitiam .dateAdded {
     position: absolute;

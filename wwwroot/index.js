@@ -16,37 +16,6 @@ const BINGMAPS_KEY = atob(
 */
 
 function createEmbedMap(latitude, longitude, target) {
-    /*
-    OpenLayers 9. Failed to reference itself properly in code;
-    errors during render.
-
-    let layer = new ol.renderer.canvas.TileLayer({
-        source: new ol.source.OSM()
-    });
-    let view = new ol.View({
-        center: ol.proj.fromLonLat([latitude, longitude]),
-        zoom: 8
-    });
-    return new ol.Map({
-        target: target,
-        layers: [ layer ],
-        view: view,
-        controls: []
-    });
-    */
-    /*
-    OpenLayers 2. Fails to render anything.
-
-    let mapnik = new OpenLayers.Layer.OSM();
-    let coords = new OpenLayers.LonLat(longitude, latitude);
-    coords = coords.transform("EPSG:4326", "EPSG900913");
-    let zoom = 15;
-
-    let map = new OpenLayers.Map(target);
-    map.addLayer(mapnik);
-    map.setCenter(coords, zoom);
-    */
-
     let imagerySet = "Road";
     let coords = latitude + "," + longitude;
     let zoomLevel = 18;
