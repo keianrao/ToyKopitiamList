@@ -1,9 +1,25 @@
 
 var domKopitiams;
-const tiamlistAPI = "http://localhost:5289";
+const TIAMLIST_API = "http://localhost:5289";
 
+const BINGMAPS_API = "https://dev.virtualearth.net/REST/v1/Imagery/Map";
+
+const BINGMAPS_KEY = atob(
+    "QW1QRWRNUzA4VHB1OXN6Nm45dFJldE" +
+    "10ZWg1UDdySm5uVkl5UUctQXk0SkVt" +
+    "QUR5RlNMZGlkMENXd0xXa1BoWg==");
 /*
-function createOSMMap(latitude, longitude, target) {
+* Needs an active Bing Maps API key here. The current
+* one may be expired shortly, so substitute your own..!
+* And obfuscating not for actual security, but just basic
+* defence against scrapers..
+*/
+
+function createEmbedMap(latitude, longitude, target) {
+    /*
+    OpenLayers 9. Failed to reference itself properly in code;
+    errors during render.
+
     let layer = new ol.renderer.canvas.TileLayer({
         source: new ol.source.OSM()
     });
@@ -17,8 +33,32 @@ function createOSMMap(latitude, longitude, target) {
         view: view,
         controls: []
     });
+    */
+    /*
+    OpenLayers 2. Fails to render anything.
+
+    let mapnik = new OpenLayers.Layer.OSM();
+    let coords = new OpenLayers.LonLat(longitude, latitude);
+    coords = coords.transform("EPSG:4326", "EPSG900913");
+    let zoom = 15;
+
+    let map = new OpenLayers.Map(target);
+    map.addLayer(mapnik);
+    map.setCenter(coords, zoom);
+    */
+
+    let imagerySet = "Road";
+    let coords = latitude + "," + longitude;
+    let zoomLevel = 18;
+
+    let url = BINGMAPS_API;
+    url += "/" + imagerySet;
+    url += "/" + coords;
+    url += "/" + zoomLevel;
+    url += "?key=" + BINGMAPS_KEY;
+
+    target.setAttribute("src", url);
 }
-*/
 
 function verifyResponse(response)
 {
@@ -96,7 +136,7 @@ function render(kopitiams)
         let passage = toRelativeTime(passageSeconds);
         domDateAdded.innerText = toRelativeTimeString(passage);
 
-        let domMap = document.createElement("div");
+        let domMap = document.createElement("img");
         domMap.setAttribute("class", "map");
 
         let domPanel1 = document.createElement("div");
@@ -109,12 +149,10 @@ function render(kopitiams)
         addee.appendChild(domDateAdded);
         domKopitiams.appendChild(addee);
 
-        /*
-        createOSMMap(
+        createEmbedMap(
             kopitiam["latitude"],
             kopitiam["longitude"],
             domMap);
-        */
     }
 }
 
@@ -130,7 +168,7 @@ function renderError(error) {
 
 window.addEventListener("load", async function() {
     domKopitiams = document.getElementById("kopitiams");
-    await fetch(tiamlistAPI + "/entries")
+    await fetch(TIAMLIST_API + "/entries")
         .then(verifyResponse)
         .then(render)
         .catch(renderError);
