@@ -19,12 +19,14 @@ function createEmbedMap(latitude, longitude, target) {
     let imagerySet = "Road";
     let coords = latitude + "," + longitude;
     let zoomLevel = 18;
+    let layers = "Basemap,Buildings";
 
     let url = BINGMAPS_API;
     url += "/" + imagerySet;
     url += "/" + coords;
     url += "/" + zoomLevel;
-    url += "?key=" + BINGMAPS_KEY;
+    url += "?mapLayer=" + layers;
+    url += "&key=" + BINGMAPS_KEY;
 
     target.setAttribute("src", url);
 }
